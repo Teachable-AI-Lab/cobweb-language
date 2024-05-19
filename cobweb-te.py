@@ -9,22 +9,25 @@ from cobweb.cobweb import CobwebTree
 parser = argparse.ArgumentParser()
 parser.add_argument('--nodes', type=int, default=1000, help='the number of expanded nodes')
 parser.add_argument('--split', type=int, default=11, help='the tested split index, start with 0')
+parser.add_argument('--instances', type=int, default=1300000, help='the number of instances trained in the loaded model')
 args = parser.parse_args()
 
 # Configuration:
 verbose = True
 window = 10  # the size of the "gram" (so context words = 2 * window)
 seed = 123  # random seed for shuffling instances
+least_freq = 3
 nodes_pred = args.nodes  # number of nodes used in multiple prediction
 tested_split = args.split
+n_instances = args.instances
 used_cores = 120  # nbr of cores used in parallel prediction
 keep_stop_word = True
 stop_word_as_anchor = False
 summary_date = datetime.datetime.now().strftime("%m%d%Y")
 default_answer = "c"
 # load_model_file = f"./models-saved/cobweb/cobweb-seed123-window10-leastfreq3-instances416667-split{tested_split}.json"
-load_model_file = "./models-saved/cobweb/cobweb-seed123-window10-leastfreq3-instances159366-split0.json"
-output_file = f"./test-summary/cobweb/test_summary_node{nodes_pred}_split{tested_split}_{summary_date}_parallel.csv"
+load_model_file = f"./models-saved/cobweb/cobweb-seed{seed}-window{window}-leastfreq{least_freq}-instances{n_instances}-split{tested_split}.json"
+output_file = f"./test-summary/cobweb/test-summary-node{nodes_pred}-split{tested_split}-{summary_date}-parallel.csv"
 
 # Initialize tree:
 tree = CobwebTree(0.000001, False, 0, True, False)
